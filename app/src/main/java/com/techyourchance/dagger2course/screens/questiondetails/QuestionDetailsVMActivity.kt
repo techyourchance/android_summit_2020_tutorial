@@ -8,15 +8,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
-import com.techyourchance.dagger2course.screens.common.viewmodels.ViewModelFactory
 import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class QuestionDetailsVMActivity : BaseActivity(), QuestionDetailsViewMvc.Listener  {
 
     @Inject lateinit var screensNavigator: ScreensNavigator
     @Inject lateinit var dialogsNavigator: DialogsNavigator
-    @Inject lateinit var myViewModelFactory: ViewModelFactory
     @Inject lateinit var viewMvcFactory: ViewMvcFactory
 
     private lateinit var mQuestionDetailsViewModel: QuestionDetailsViewModel
@@ -26,7 +26,6 @@ class QuestionDetailsVMActivity : BaseActivity(), QuestionDetailsViewMvc.Listene
     private lateinit var questionId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        injector.inject(this)
         super.onCreate(savedInstanceState)
 
         viewMvc = viewMvcFactory.newQuestionDetailsViewMvc(null)
@@ -34,7 +33,7 @@ class QuestionDetailsVMActivity : BaseActivity(), QuestionDetailsViewMvc.Listene
 
         questionId = intent.extras!!.getString(EXTRA_QUESTION_ID)!!
 
-        mQuestionDetailsViewModel = ViewModelProvider(this, myViewModelFactory).get(QuestionDetailsViewModel::class.java)
+        mQuestionDetailsViewModel = ViewModelProvider(this).get(QuestionDetailsViewModel::class.java)
         mQuestionDetailsViewModel.status.observe(this, Observer {
             when(it) {
                 is QuestionDetailsViewModel.Status.FetchingQuestion -> {

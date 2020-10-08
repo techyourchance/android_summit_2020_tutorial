@@ -1,17 +1,19 @@
 package com.techyourchance.dagger2course.screens.questiondetails
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
 import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
 import com.techyourchance.dagger2course.questions.QuestionWithBody
-import com.techyourchance.dagger2course.screens.common.viewmodels.SavedStateViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class QuestionDetailsViewModel @Inject constructor(
+class QuestionDetailsViewModel @ViewModelInject constructor(
         private val fetchQuestionsUseCase: FetchQuestionsUseCase,
-        private val fetchQuestionDetailsUseCase: FetchQuestionDetailsUseCase
-): SavedStateViewModel() {
+        private val fetchQuestionDetailsUseCase: FetchQuestionDetailsUseCase,
+        @Assisted private val savedStateHandle: SavedStateHandle
+): ViewModel() {
 
     sealed class Status {
         object FetchingQuestion: Status()
@@ -19,13 +21,9 @@ class QuestionDetailsViewModel @Inject constructor(
         object Error: Status()
     }
 
-    private lateinit var _status: MutableLiveData<Status>
+    private val _status: MutableLiveData<Status> = savedStateHandle.getLiveData("status")
     val status: LiveData<Status> get() = _status
 
-    override fun init(savedStateHandle: SavedStateHandle) {
-        val status : MutableLiveData<Status> = savedStateHandle.getLiveData("status")
-        _status = status
-    }
 
     fun fetchQuestionDetails(questionId: String) {
         if (status.value != null) {

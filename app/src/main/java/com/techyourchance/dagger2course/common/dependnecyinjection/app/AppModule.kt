@@ -7,11 +7,15 @@ import com.techyourchance.dagger2course.networking.StackoverflowApi
 import com.techyourchance.dagger2course.networking.UrlProvider
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Module
-class AppModule(val application: Application) {
+@InstallIn(SingletonComponent::class)
+class AppModule {
 
     @Provides
     @AppScope
@@ -36,9 +40,6 @@ class AppModule(val application: Application) {
     @AppScope
     @Provides
     fun urlProvider() = UrlProvider()
-
-    @Provides
-    fun application() = application
 
     @Provides
     @AppScope

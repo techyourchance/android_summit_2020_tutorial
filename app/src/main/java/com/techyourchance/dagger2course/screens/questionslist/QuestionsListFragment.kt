@@ -10,9 +10,11 @@ import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
 import com.techyourchance.dagger2course.screens.common.fragments.BaseFragment
 import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class QuestionsListFragment : BaseFragment(), QuestionsListViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -25,11 +27,6 @@ class QuestionsListFragment : BaseFragment(), QuestionsListViewMvc.Listener {
     private lateinit var viewMvc: QuestionsListViewMvc
 
     private var isDataLoaded = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        injector.inject(this)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewMvc = viewMvcFactory.newQuestionsListViewMvc(container)
